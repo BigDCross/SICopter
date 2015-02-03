@@ -4,7 +4,17 @@
 
 #include "Particle_Filter.hpp"
 
-int main (int argc, char **argv)
+//  TODO:
+//  Do both system update and measurement update
+//  Design and implement system update step
+//      - Use estimated positions to calculate velocity and accel?
+//      - Use flight data to update?
+//  Improve histogram calculation step
+//  Implement initial detection step
+//  Comment and Document
+//  Redesign weighing step?
+
+int main (int argc, char *argv[ ])
 {
     // Initial particle filter stuff
     std::vector<cv::Point2i> particles;
@@ -36,8 +46,8 @@ int main (int argc, char **argv)
     cv::VideoCapture c(0);
     cv::Mat src, m, dst;
 
-    cv::MatND current_center_hist;
-    cv::Mat current_center;
+    cv::MatND initial_region_hist;
+    cv::Mat initial_region;
 
     int key = 0;
     bool start = false;
@@ -55,20 +65,38 @@ int main (int argc, char **argv)
             // Make slice around center and calculate it's histogram
             if(num_iterations == 0)
             {
-                current_center = src(cv::Range(estimated_pos[num_iterations].y - 60,
+                initial_region = src(cv::Range(estimated_pos[num_iterations].y - 60,
                                                        estimated_pos[num_iterations].y + 60),
                                              cv::Range(estimated_pos[num_iterations].x - 60,
                                                        estimated_pos[num_iterations].x + 60)).clone();
-                current_center_hist = calc_hist(current_center);
+                initial_region_hist = calc_hist(initial_region);
             }
 
-            // DEBUG: Draw center slice
+            // Draw center slice
             draw_box(dst, cv::Point2i(estimated_pos[num_iterations].x+60, estimated_pos[num_iterations].y+60),
                           cv::Point2i(estimated_pos[num_iterations].x-60, estimated_pos[num_iterations].y-60),
                           cv::Scalar(0, 255, 0));
 
 
-            // TODO: Do both system update and measurement update
+
+            /*
+            // This step is very tentative!!!
+            double gain = 0.1;
+            if(num_iterations > 10) // Wait until we have enough information
+            {
+                for(int i=0; i<num_particles; ++i)
+                {
+                    // Update particles with system update and then add noise
+                    int dx = (int)(gain * (estimated_pos[num_iterations].x - estimated_pos[num_iterations - 1].x));
+                    int dy = (int)(gain * (estimated_pos[num_iterations].y - estimated_pos[num_iterations - 1].y));
+                    dx += (int)(sqrt(measurement_covariance)*randn());
+                    dy += (int)(sqrt(measurement_covariance)*randn());
+
+                    particles[i].x = particles[i].x + dx;
+                    particles[i].y = particles[i].y + dy;
+                }
+            }
+            */
 
             // Measurement update and particle weighing step
             double sum_of_weights = 0.0;
@@ -87,16 +115,14 @@ int main (int argc, char **argv)
                                   cv::Range(particles_update[i].x - 60,
                                             particles_update[i].x + 60)).clone();
 
-                //cv::imshow("roi", roi);
-
-                // DEBUG: Draw roi slices
+                // Draw roi slices
                 draw_box(dst, cv::Point2i(particles_update[i].x+60, particles_update[i].y+60),
                               cv::Point2i(particles_update[i].x-60, particles_update[i].y-60),
                               cv::Scalar(0, 0, 255));
 
                 // Calculate particles weights based on roi histogram comparison
                 cv::MatND hist = calc_hist(roi);
-                double weight = calc_weight(current_center_hist, hist);
+                double weight = calc_weight(initial_region_hist, hist);
                 //double prob = exp(-20.0 * (weight*weight));
 
                 //particle_weights[i] = prob;
@@ -112,7 +138,7 @@ int main (int argc, char **argv)
             }
 
             // Check resampling steps and redundancy of work
-            // Resampling step
+            // Resampling step 1
             double seq_sum = 0.0;
             std::vector<double> cumsum;
             for(int n=0; n<num_particles; ++n)
@@ -121,7 +147,7 @@ int main (int argc, char **argv)
                 cumsum.push_back(seq_sum);
             }
 
-            // Check this bit
+            // Resampling step 2
             cv::Point2i result(0, 0);
             for(int i=0; i<num_particles; ++i)
             {
@@ -151,8 +177,14 @@ int main (int argc, char **argv)
             estimated_pos.push_back(sum);
             num_iterations++;
 
+            // Plot estimated positions
+            for(int i=0; i<estimated_pos.size(); ++i)
+            {
+                cv::circle(src, estimated_pos[i], 2, cv::Scalar(255, 255, 255), -1);
+            }
+
             cv::imshow("dst", dst);
-            cv::imshow("current_center", current_center);
+            cv::imshow("initial", initial_region);
         }
         key = cv::waitKey(5);
         if(key == 1048691)
