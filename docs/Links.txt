@@ -1,0 +1,18 @@
+Particle Filters:
+    Particle Filter Tutorial With MATLAB Part 1: Student Dave - http://youtu.be/O-lAJVra1PU
+    Particle Filter Explained without Equations - http://youtu.be/aUkBa1zMKv4
+    Particle Filter Object Tracking - Person Crossing - http://youtu.be/B4ianyQTnCE
+
+Kalman Filter:
+    The Extended Kalman Filter: An Interactive Tutorial for Non-Experts - http://home.wlu.edu/~levys/kalman_tutorial/
+
+Programming Style Guides:
+    Google C++ Style Guide - http://google-styleguide.googlecode.com/svn/trunk/cppguide.html
+    PEP8 Style Guide for Python Code - https://www.python.org/dev/peps/pep-0008/
+
+Git:
+    Git Manual - http://git-scm.com/
+    Git Cheatsheet - http://ndpsoftware.com/git-cheatsheet.html
+
+General Linux:
+    LinuxCommand - http://linuxcommand.org/index.php
