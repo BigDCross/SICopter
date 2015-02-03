@@ -18,5 +18,5 @@ include_directories(
     ${INCLUDE_DIR}
 )
 
-add_executable(Color_Tracker ${SRC_DIR}/Color_Tracker_New.cpp)
+add_executable(Color_Tracker ${SRC_DIR}/Color_Tracker.cpp)
 target_link_libraries(Color_Tracker ${OpenCV_LIBS})

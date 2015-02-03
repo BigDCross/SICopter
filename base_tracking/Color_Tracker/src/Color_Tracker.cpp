@@ -18,7 +18,7 @@ int main (int argc, char **argv)
     double system_covariance = 100.0;
     double measurement_covariance = 100.0;
 
-    int num_particles = 5;
+    int num_particles = 10;
 
     // Initialize vectors
     for(int i=0; i<num_particles; ++i)
@@ -67,14 +67,17 @@ int main (int argc, char **argv)
                           cv::Point2i(estimated_pos[num_iterations].x-60, estimated_pos[num_iterations].y-60),
                           cv::Scalar(0, 255, 0));
 
-            // System update and particle weighing step
+
+            // TODO: Do both system update and measurement update
+
+            // Measurement update and particle weighing step
             double sum_of_weights = 0.0;
             std::cout << "Iteration: " << num_iterations << std::endl;
             for(int i=0; i<num_particles; ++i)
             {
                 // Update particles with system noise
-                int dx = 0 + (int)(sqrt(system_covariance)*randn());
-                int dy = 0 + (int)(sqrt(system_covariance)*randn());
+                int dx = 0 + (int)(sqrt(measurement_covariance)*randn());
+                int dy = 0 + (int)(sqrt(measurement_covariance)*randn());
                 particles_update[i].x = particles[i].x + dx;
                 particles_update[i].y = particles[i].y + dy;
 
