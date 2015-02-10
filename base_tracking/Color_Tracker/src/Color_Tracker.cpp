@@ -25,7 +25,7 @@ int main (int argc, char *argv[ ])
 
     cv::Point2i initial_estimate;
     double initial_covariance = 100.0;
-    double system_covariance = 100.0;
+    double system_covariance = 0.0;
     double measurement_covariance = 100.0;
 
     int num_particles = 10;
@@ -78,36 +78,28 @@ int main (int argc, char *argv[ ])
                           cv::Scalar(0, 255, 0));
 
 
-
-            /*
-            // This step is very tentative!!!
-            double gain = 0.1;
-            if(num_iterations > 10) // Wait until we have enough information
-            {
-                for(int i=0; i<num_particles; ++i)
-                {
-                    // Update particles with system update and then add noise
-                    int dx = (int)(gain * (estimated_pos[num_iterations].x - estimated_pos[num_iterations - 1].x));
-                    int dy = (int)(gain * (estimated_pos[num_iterations].y - estimated_pos[num_iterations - 1].y));
-                    dx += (int)(sqrt(measurement_covariance)*randn());
-                    dy += (int)(sqrt(measurement_covariance)*randn());
-
-                    particles[i].x = particles[i].x + dx;
-                    particles[i].y = particles[i].y + dy;
-                }
-            }
-            */
-
-            // Measurement update and particle weighing step
-            double sum_of_weights = 0.0;
-            std::cout << "Iteration: " << num_iterations << std::endl;
+            // System update step
+            // Does nothing for now (system_covariance is 0)
             for(int i=0; i<num_particles; ++i)
             {
                 // Update particles with system noise
-                int dx = 0 + (int)(sqrt(measurement_covariance)*randn());
-                int dy = 0 + (int)(sqrt(measurement_covariance)*randn());
+                int dx = (int)(sqrt(system_covariance)*randn());
+                int dy = (int)(sqrt(system_covariance)*randn());
+
                 particles_update[i].x = particles[i].x + dx;
                 particles_update[i].y = particles[i].y + dy;
+            }
+
+            // Measurement update and particle weighing step
+            double sum_of_weights = 0.0;
+            //std::cout << "Iteration: " << num_iterations << std::endl;
+            for(int i=0; i<num_particles; ++i)
+            {
+                // Update particles with measurement noise
+                int dx = 0 + (int)(sqrt(measurement_covariance)*randn());
+                int dy = 0 + (int)(sqrt(measurement_covariance)*randn());
+                particles_update[i].x = particles_update[i].x + dx;
+                particles_update[i].y = particles_update[i].y + dy;
 
                 // Slice up image with updated particles
                 cv::Mat roi = src(cv::Range(particles_update[i].y - 60,
@@ -134,7 +126,7 @@ int main (int argc, char *argv[ ])
             for(int i=0; i<num_particles; ++i)
             {
                 particle_weights[i] /= sum_of_weights;
-                std::cout << "Weight: " << particle_weights[i] << std::endl;
+                //std::cout << "Weight: " << particle_weights[i] << std::endl;
             }
 
             // Check resampling steps and redundancy of work
@@ -161,7 +153,7 @@ int main (int argc, char *argv[ ])
                     }
                 }
                 particles[i] = result;
-                std::cout << particles[i] << std::endl;
+                //std::cout << particles[i] << std::endl;
             }
 
             // Take weighted avg of particles positions
@@ -186,8 +178,9 @@ int main (int argc, char *argv[ ])
             cv::imshow("dst", dst);
             cv::imshow("initial", initial_region);
         }
-        key = cv::waitKey(5);
-        if(key == 1048691)
+        key = cv::waitKey(1);
+        //std::cout << key << std::endl;
+        if(key != -1)
         {
             start = true;
         }
