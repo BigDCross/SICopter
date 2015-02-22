@@ -1,3 +1,21 @@
 [submodule "ardupilot"]
 	path = ardupilot
 	url = git@github.com:BigDCross/ardupilot.git
+[submodule "PX4Firmware"]
+	path = PX4Firmware
+	url = git@github.com:diydrones/PX4Firmware.git
+[submodule "PX4NuttX"]
+	path = PX4NuttX
+	url = git@github.com:diydrones/PX4NuttX.git
+[submodule "uavcan"]
+	path = uavcan
+	url = git@github.com:diydrones/uavcan.git
+[submodule "VRNuttX"]
+	path = VRNuttX
+	url = git@github.com:virtualrobotix/vrbrain_nuttx.git
+[submodule "mavlink"]
+	path = mavlink
+	url = git@github.com:mavlink/mavlink.git
+[submodule "MAVProxy"]
+	path = MAVProxy
+	url = git@github.com:tridge/MAVProxy.git
