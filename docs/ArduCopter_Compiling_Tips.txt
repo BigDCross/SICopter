@@ -1,0 +1,7 @@
+Run px4-clean before recompiling.
+
+In PX4Firmware and PX4NuttX repos, checkout the ArduCopter branch of the same version you are compiling.
+
+You might get a python import error for the modules "genmsg" and "gencpp". These are standalone ros hydro python libraries that can be installed through apt-get but the errors may remain. Checking out the following repos and installing manually will likely fix it:
+-https://github.com/ros/genmsg
+-https://github.com/ros/gencpp
