@@ -1,0 +1,7 @@
+If you are making a new module use the other modules as an example
+To install the new module follow these steps:
+    1. run "python your_module.py" (make sure your module compiles)
+    2. cd to root of MAVProxy repo (should contain setup.py)
+    3. Run "sudo python setup.py build"
+    4. Run "sudo python setup.py install"
+    5. Repeat 4 (I get errors on the first try but its works on the second. IDK)

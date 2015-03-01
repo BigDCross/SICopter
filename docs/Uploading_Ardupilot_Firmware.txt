@@ -1,0 +1,7 @@
+Procedure:
+    1. Read Arducopter_Compiling_Tips.txt
+    2. Once compiled open APM_Planner (or other GCS) and backup all parameters
+       so you don't need to redo calibration, etc
+    3. Run "make px4-v2-upload"
+    4. Open APM_Planner again and upload saved parameters
+    5. Open mavproxy and run "param set FLTMODE1 17". This will set one of the flight modes to SI mode
