@@ -26,3 +26,6 @@
 *.exe
 *.out
 *.app
+
+# Copter logs (logs get quite large)
+SICopter_MAVLOGS/
