@@ -16,3 +16,6 @@
 [submodule "mavlink"]
 	path = mavlink
 	url = git@github.com:mavlink/mavlink.git
+[submodule "MAVProxy"]
+	path = MAVProxy
+	url = git@github.com:BigDCross/MAVProxy.git
