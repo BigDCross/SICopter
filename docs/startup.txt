@@ -1,0 +1,17 @@
+Start up Script for the onbaord computer:
+
+After cloning the repo, you will need to add a script to the main users .bashrc.
+This should be located in the users home folder.
+
+The script will check what tty the user is logging into, if it is tty1, then it will start the script.
+This means on startup, since the first shell is tty1, the user will be automaticlly logged in and the script will start.
+If you need to use tty1 then you can ctrl-c out and use the terminal. If possible, using another tty or ssh would be a good idea.
+Other terminals and ssh will not automatically start the sctipt, only tty1 will do that.
+
+Lines to add to .bashrc:
+
+echo -n "checking tty: "
+echo $(tty)
+if [ $(tty) = "/dev/tty1" ]; then
+    ~/SI/SICopter/Start_Mavproxy.sh
+fi
