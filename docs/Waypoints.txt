@@ -1,3 +1,15 @@
+Scripting waypoints:
+You can write a waypoint file (like below) that you can load into APMPlanner or MAVProxy and 
+then upload to the PixHawk. You can also plan a mission in GCS then save it out. This will
+be easier than hand creating one of these files.
+
+It appears GPS coords in the file format are absolute, not relative, so we will have to 
+create (or autogenerate) our own mission files every time we fly a mission.
+
+To autogenerate we can probably use MAVProxys built-in sensor module or just get the
+gps data packet. We can then save the file out and load it via MAVProxys wp module.
+
+Waypoint File Format:
 Links:
 http://qgroundcontrol.org/mavlink/waypoint_protocol
 
@@ -5,7 +17,7 @@ Format:
 QGC WPL <VERSION>
 <INDEX> <CURRENT WP> <COORD FRAME> <COMMAND> <PARAM1> <PARAM2> <PARAM3> <PARAM4> <PARAM5/X/LONGITUDE> <PARAM6/Y/LATITUDE> <PARAM7/Z/ALTITUDE> <AUTOCONTINUE>
 
-Example (found in file basic-arducopter-mission_example.txt):
+Example:
 QGC WPL 110
 0	1	0	16	0	0	0	0	51.968611	-0.394725	0.000000	1
 1	0	3	22	0.000000	0.000000	0.000000	0.000000	51.968746	-0.394650	15.000000	1
