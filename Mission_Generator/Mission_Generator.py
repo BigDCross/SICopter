@@ -52,8 +52,11 @@ class MissionParser:
         for i, curr_line in enumerate(lines):
             tokens = curr_line.split("\t")
 
+            # First line contains file format info
             if i == 0:
                 self.mission_outfile.write("QGC WPL 110\n")
+
+            # Write out second line unchanged
             elif i == 1:
                 curr_line = curr_line[0:-2] # Kill newline at end (this might fail on windows)
                 self.mission_outfile.write(curr_line)
@@ -62,18 +65,22 @@ class MissionParser:
                 self.starting_point = GPSCoord(tokens[9], tokens[8]) # tokens[8]: lat tokens[9]: lon
                 next_pos = self.starting_point
             else:
+                # dy is north(+)/south(-)
+                # dx is east(+)/west(-)
                 dy = float(tokens[8])
                 dx = float(tokens[9])
                 next_pos += (dx, dy)
 
                 for j, tok in enumerate(tokens):
+                    # Write all tokens unchanged except for 8 and 9 (lat and lon)
+                    # and 11 which just needs a newline removed
                     if j == 8:
                         self.mission_outfile.write(str(next_pos.lat))
                         self.mission_outfile.write("\t")
                     elif j == 9:
                         self.mission_outfile.write(str(next_pos.lon))
                         self.mission_outfile.write("\t")
-                    elif j == 11: # No tab at end
+                    elif j == 11:
                         tok = tok[0:-2] # Kill newline at end
                         self.mission_outfile.write(tok)
                         self.mission_outfile.write("\n")
