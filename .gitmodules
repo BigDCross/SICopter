@@ -19,3 +19,6 @@
 [submodule "MAVProxy"]
 	path = MAVProxy
 	url = git@github.com:BigDCross/MAVProxy.git
+[submodule "infrapix"]
+	path = infrapix
+	url = git@github.com:p-v-o-s/infrapix.git
